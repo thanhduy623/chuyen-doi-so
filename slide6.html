@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lời cảm ơn</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        :root {
+            --gradient-start: #3b83f68d;
+            --gradient-end: #8a5cf687;
+            --primary-text-color: #ffffff;
+            --secondary-text-color: rgba(255, 255, 255, 0.85);
+            --accent-color: #22d3ee;
+            --particle-color: rgba(255, 255, 255, 0.5);
+            --card-bg-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--primary-text-color);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .slide-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            padding-bottom: 8vh;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .thank-you-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2.5rem;
+        }
+
+        .final-logo {
+            max-width: 120px;
+            height: auto;
+            opacity: 0;
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s forwards;
+        }
+
+        .thank-you-text {
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            font-weight: 700;
+            line-height: 1.5;
+            max-width: 800px;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 1.3s forwards;
+        }
+
+        .thank-you-text span {
+            display: block;
+            font-size: 1.3rem;
+            font-weight: 400;
+            color: var(--secondary-text-color);
+            margin-top: 0.75rem;
+        }
+
+        .back-button {
+            background: var(--card-bg-color);
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--secondary-text-color);
+            border-radius: 50%;
+            color: var(--primary-text-color);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: buttonFadeInUp 0.8s ease-out 2.1s forwards;
+            z-index: 3;
+        }
+
+        .back-button:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateX(-50%) translateY(-5px);
+            box-shadow: 0 10px 20px rgba(34, 211, 238, 0.3);
+        }
+
+        /* Keyframes */
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes buttonFadeInUp {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="particle-container"></div>
+    <div class="slide-container">
+        <div class="thank-you-content">
+            <img src="Image/logo.png" alt="Logo Tổ Đảng" class="final-logo">
+            <div class="thank-you-text">
+                TỔ ĐẢNG CÔNG NGHỆ THÔNG TIN <br>
+                TRÂN TRỌNG CẢM ƠN CÁC ĐỒNG CHÍ <br>
+                ĐÃ DÀNH THỜI GIAN THEO DÕI
+                <span>Kính chúc toàn thể Chi bộ nhiều sức khỏe!</span>
+                <br>
+            </div>
+        </div>
+        <a href="index.html" class="back-button"> 🏠︎ </a>
+    </div>
+
+    <script>
+        const particleContainer = document.getElementById('particle-container');
+        if (particleContainer) {
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.style.cssText = `position:absolute;width:${Math.random() * 3 + 1}px;height:${Math.random() * 3 + 1}px;background:var(--particle-color);border-radius:50%;top:${Math.random() * 100}%;left:${Math.random() * 100}%;animation:float ${Math.random() * 15 + 10}s infinite ease-in-out;animation-delay:${Math.random() * 20}s;opacity:0;`;
+                particleContainer.appendChild(p);
+            }
+            if (!document.querySelector('style[data-anim="float"]')) {
+                const s = document.createElement("style");
+                s.setAttribute('data-anim', 'float');
+                s.innerText = `@keyframes float{0%{transform:translateY(0);opacity:0}25%{opacity:1}50%{transform:translateY(-15vh)}75%{opacity:1}100%{transform:translateY(0);opacity:0}}`;
+                document.head.appendChild(s);
+            }
+        }
+    </script>
+</body>
+
+</html>

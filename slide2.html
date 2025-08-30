@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 2: Khái quát chuyển đổi số</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Thư viện icon Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        :root {
+            --gradient-start: #3b82f6;
+            --gradient-end: #8b5cf6;
+            --primary-text-color: #ffffff;
+            --secondary-text-color: rgba(255, 255, 255, 0.85);
+            --accent-color: #22d3ee;
+            --sub-item-hover-color: #a78bfa;
+            /* <-- THÊM MÀU MỚI CHO HOVER */
+            --primary-text-color: #ffffff;
+            --secondary-text-color: rgba(255, 255, 255, 0.85);
+            --accent-color: #22d3ee;
+            /* Xanh Cyan nổi bật */
+            --particle-color: rgba(255, 255, 255, 0.5);
+            --card-bg-color: rgba(255, 255, 255, 0.1);
+            --card-border-color: rgba(255, 255, 255, 0.2);
+            --mindmap-transition-speed: 0.8s;
+            --mindmap-transition-timing: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--primary-text-color);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- Nền hạt chuyển động --- */
+        #particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background-color: var(--particle-color);
+            border-radius: 50%;
+            animation: float 25s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+
+            25% {
+                opacity: 1;
+            }
+
+            50% {
+                transform: translateY(-20vh) translateX(10vw);
+            }
+
+            75% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+        }
+
+        /* --- Bố cục chính --- */
+        .slide-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        /* --- Logo --- */
+        .logo {
+            position: absolute;
+            width: 80px;
+            top: 40px;
+            right: 40px;
+            width: 150px;
+        }
+
+        .logo img {
+            width: 80px;
+            height: auto;
+        }
+
+        /* --- Header của slide --- */
+        .slide-header {
+            width: 100%;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.5s forwards;
+        }
+
+        .slide-header h1 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 900;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* --- Khu vực nội dung chính --- */
+        .main-content {
+            transform: scale(0.8);
+            transform-origin: center;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+        }
+
+        .content-section {
+            position: absolute;
+            width: 100%;
+            max-width: 1100px;
+            padding: 20px;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            pointer-events: none;
+        }
+
+        .content-section.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        /* --- Infographic cho phần "Khái niệm" --- */
+        #content-khai-niem .infographic {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .infographic-card,
+        .infographic-arrow {
+            opacity: 0;
+            animation: popIn 0.6s ease forwards;
+        }
+
+        .infographic-card {
+            background: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 16px;
+            padding: 0.7rem;
+            width: 270px;
+            height: 270px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .infographic-card:nth-child(1) {
+            animation-delay: 0.8s;
+        }
+
+        .infographic-arrow:nth-child(2) {
+            animation-delay: 1.1s;
+        }
+
+        .infographic-card:nth-child(3) {
+            animation-delay: 1.4s;
+        }
+
+        .infographic-arrow:nth-child(4) {
+            animation-delay: 1.7s;
+        }
+
+        .infographic-card:nth-child(5) {
+            animation-delay: 2.0s;
+        }
+
+        .infographic-card i {
+            font-size: 8rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .infographic-card p {
+            font-size: 1.2rem;
+            font-weight: bold;
+            line-height: 1.4;
+        }
+
+        .infographic-arrow i {
+            font-size: 3rem;
+            color: var(--secondary-text-color);
+        }
+
+        /* --- Bố cục cho phần "Tính tất yếu" --- */
+        #content-tat-yeu .inevitability-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .inevitability-card {
+            background: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+            text-align: left;
+        }
+
+        #content-tat-yeu.active .inevitability-card:nth-child(1) {
+            animation-delay: 0.4s;
+        }
+
+        #content-tat-yeu.active .inevitability-card:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+
+        #content-tat-yeu.active .inevitability-card:nth-child(3) {
+            animation-delay: 0.8s;
+        }
+
+        #content-tat-yeu.active .inevitability-card:nth-child(4) {
+            animation-delay: 1.0s;
+        }
+
+        .inevitability-card .icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .inevitability-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .inevitability-card p {
+            font-size: 1.0rem;
+            color: var(--secondary-text-color);
+            line-height: 1.5;
+        }
+
+        #content-tat-yeu .conclusion-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        #content-tat-yeu.active .conclusion-text {
+            animation-delay: 1.3s;
+        }
+
+        #content-tat-yeu .conclusion-text span {
+            color: var(--accent-color);
+        }
+
+        /* --- Bố cục cho phần "Giá trị" --- */
+        #content-gia-tri .value-pillars-container {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 2rem;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        #content-gia-tri .value-pillar-card {
+            background: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            flex: 1;
+            min-width: 280px;
+            max-width: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        #content-gia-tri.active .value-pillar-card:nth-child(1) {
+            animation-delay: 0.4s;
+        }
+
+        #content-gia-tri.active .value-pillar-card:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+
+        #content-gia-tri.active .value-pillar-card:nth-child(3) {
+            animation-delay: 0.8s;
+        }
+
+        #content-gia-tri .value-pillar-card .icon {
+            font-size: 8rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+
+        #content-gia-tri .value-pillar-card h3 {
+            font-size: 1.65rem;
+            margin-bottom: 1rem;
+        }
+
+        #content-gia-tri .value-pillar-card p {
+            font-size: 1.1rem;
+            color: var(--secondary-text-color);
+            line-height: 1.6;
+        }
+
+        /* --- PHẦN MỚI: SƠ ĐỒ TƯ DUY "LỢI ÍCH" (CẬP NHẬT V3 - ĐỐI XỨNG) --- */
+        #mindmap-container {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            /* Tăng chiều cao để có không gian */
+            max-width: 1000px;
+            margin: 0 auto;
+            transform-style: preserve-3d;
+            perspective: 1200px;
+        }
+
+        .mm-center-node {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            background: var(--card-bg-color);
+            border: 5px solid var(--accent-color);
+            backdrop-filter: blur(10px);
+            color: var(--primary-text-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 1.7rem;
+            font-weight: 800;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transition: transform var(--mindmap-transition-speed) ease, opacity 0.5s ease;
+        }
+
+        .mm-branch {
+            position: absolute;
+            cursor: pointer;
+            z-index: 5;
+            transition: transform var(--mindmap-transition-speed) var(--mindmap-transition-timing),
+                top var(--mindmap-transition-speed) ease-out,
+                left var(--mindmap-transition-speed) ease-out,
+                opacity 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            /* Icon và text xếp dọc */
+            align-items: center;
+            gap: 0.75rem;
+            /* Khoảng cách giữa icon và text */
+            /* Căn giữa nhánh vào đúng tọa độ top/left của nó */
+            transform: translate(-50%, -50%);
+        }
+
+        /* Cấu trúc mới cho icon infographic */
+        .mm-infographic-icon {
+            width: 120px;
+            height: 120px;
+            background: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .mm-infographic-icon i {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+        }
+
+        .mm-main-node {
+            padding: 15px 30px;
+            /* Tăng padding cho bubble lớn hơn */
+            border-radius: 50px;
+            color: var(--secondary-text-color);
+            font-weight: bold;
+            font-size: 1.15rem;
+            /* Tăng cỡ chữ */
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 15;
+            background: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            /* <-- THÊM DÒNG NÀY */
+        }
+
+        .mm-branch:hover .mm-main-node,
+        .mm-branch.active .mm-main-node {
+            background-color: var(--accent-color);
+            color: var(--primary-text-color);
+            border-color: var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        .mm-branch:hover .mm-infographic-icon {
+            transform: scale(1.1);
+            border-color: var(--accent-color);
+        }
+
+        .mm-sub-nodes {
+            list-style: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1px;
+            height: 1px;
+            pointer-events: none;
+        }
+
+        .mm-sub-nodes li {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: center;
+            transition: all 0.5s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            transform: var(--pos-initial);
+        }
+
+        .mm-sub-nodes li .icon {
+            width: 100px;
+            height: 100px;
+            padding: 10px;
+            border-radius: 50%;
+            background: var(--card-bg-color);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 34px;
+            color: var(--accent-color);
+        }
+
+        .mm-sub-nodes li span {
+            font-size: 0.9rem;
+            /* <-- TĂNG KÍCH THƯỚC CHỮ */
+            font-weight: bold;
+            /* Thêm in đậm cho rõ hơn */
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            /* Rút ngắn transition một chút */
+            background: var(--card-bg-color);
+            /* <-- DÙNG NỀN KÍNH MỜ */
+            border: 1px solid var(--card-border-color);
+            /* <-- THÊM VIỀN */
+            color: var(--primary-text-color);
+            padding: 5px 12px;
+            /* <-- TĂNG PADDING CHO KHUNG RỘNG HƠN */
+            border-radius: 8px;
+            /* <-- BO TRÒN VIỀN HƠN CHÚT */
+            white-space: nowrap;
+            backdrop-filter: blur(5px);
+            /* Thêm hiệu ứng mờ kính */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            /* Thêm bóng mờ */
+        }
+
+        /* [THAY ĐỔI] Vị trí các nhánh được tính toán để tạo thành một vòng tròn đối xứng */
+        #mm-hieu-suat {
+            top: 15.4%;
+            left: 70%;
+        }
+
+        /* Góc 30 độ so với trục dọc */
+        #mm-thoi-gian {
+            top: 50%;
+            left: 90%;
+        }
+
+        /* Góc 90 độ */
+        #mm-chi-phi {
+            top: 84.6%;
+            left: 70%;
+        }
+
+        /* Góc 150 độ */
+        #mm-minh-bach {
+            top: 84.6%;
+            left: 30%;
+        }
+
+        /* Góc 210 độ */
+        #mm-hoi-nhap {
+            top: 50%;
+            left: 10%;
+        }
+
+        /* Góc 270 độ */
+        #mm-bao-mat {
+            top: 15.4%;
+            left: 30%;
+        }
+
+        /* Góc 330 độ */
+
+        /* Vị trí các icon con xung quanh node chính */
+        .mm-sub-nodes li {
+            --pos-initial: rotate(0deg) translate(0px) rotate(0deg) translate(-50%, -50%);
+            opacity: 0;
+        }
+
+        .mm-branch.active li:nth-child(1) {
+            --pos-active: rotate(0deg) translate(160px) rotate(0deg) translate(-50%, -50%);
+        }
+
+        .mm-branch.active li:nth-child(2) {
+            --pos-active: rotate(72deg) translate(160px) rotate(-72deg) translate(-50%, -50%);
+        }
+
+        .mm-branch.active li:nth-child(3) {
+            --pos-active: rotate(144deg) translate(160px) rotate(-144deg) translate(-50%, -50%);
+        }
+
+        .mm-branch.active li:nth-child(4) {
+            --pos-active: rotate(216deg) translate(160px) rotate(-216deg) translate(-50%, -50%);
+        }
+
+        .mm-branch.active li:nth-child(5) {
+            --pos-active: rotate(288deg) translate(160px) rotate(-288deg) translate(-50%, -50%);
+        }
+
+        #mm-chi-phi.active li:nth-child(2),
+        #mm-minh-bach.active li:nth-child(2),
+        #mm-hoi-nhap.active li:nth-child(2),
+        #mm-bao-mat.active li:nth-child(2) {
+            --pos-active: rotate(90deg) translate(160px) rotate(-90deg) translate(-50%, -50%);
+        }
+
+        #mm-chi-phi.active li:nth-child(3),
+        #mm-minh-bach.active li:nth-child(3),
+        #mm-hoi-nhap.active li:nth-child(3),
+        #mm-bao-mat.active li:nth-child(3) {
+            --pos-active: rotate(180deg) translate(160px) rotate(-180deg) translate(-50%, -50%);
+        }
+
+        #mm-chi-phi.active li:nth-child(4),
+        #mm-minh-bach.active li:nth-child(4),
+        #mm-hoi-nhap.active li:nth-child(4),
+        #mm-bao-mat.active li:nth-child(4) {
+            --pos-active: rotate(270deg) translate(160px) rotate(-270deg) translate(-50%, -50%);
+        }
+
+
+        /* Trạng thái thu phóng */
+        #mindmap-container.zoomed-in .mm-branch:not(.active) {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+            /* Giữ lại transform gốc */
+            pointer-events: none;
+        }
+
+        #mindmap-container.zoomed-in .mm-branch.active {
+            top: 58%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1.3);
+            z-index: 100;
+        }
+
+        #mindmap-container.zoomed-in .mm-branch.active .mm-sub-nodes li {
+            transform: var(--pos-active);
+            opacity: 1;
+        }
+
+        #mindmap-container.zoomed-in .mm-branch.active .mm-sub-nodes li span {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        #mindmap-container.zoomed-in .mm-center-node,
+        #mindmap-container.zoomed-in .mm-connector-lines {
+            opacity: 0.1;
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .mm-connector-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            transition: opacity 0.5s ease, transform var(--mindmap-transition-speed) ease;
+        }
+
+        .mm-connector-lines line {
+            /* [THAY ĐỔI] Đổi từ path sang line */
+            stroke: var(--card-border-color);
+            stroke-width: 2;
+            fill: none;
+            stroke-linecap: round;
+        }
+
+        /* --- Menu điều hướng chính --- */
+        .main-nav {
+            display: flex;
+            gap: 1rem;
+            background: var(--card-bg-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid var(--card-border-color);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.8s forwards;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .main-nav a {
+            color: var(--secondary-text-color);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .main-nav a.active,
+        .main-nav a:hover {
+            color: var(--primary-text-color);
+            background-color: var(--accent-color);
+        }
+
+        /* --- Nút Tiếp tục --- */
+        .next-button {
+            background: var(--card-bg-color);
+            padding-right: 0;
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            height: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            border: 2px solid var(--secondary-text-color);
+            border-radius: 50%;
+            /* Thuộc tính quan trọng nhất để tạo hình tròn */
+            color: var(--primary-text-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1.8s forwards;
+            z-index: 3;
+        }
+
+        .next-button:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(34, 211, 238, 0.3);
+        }
+
+        /* --- [THÊM MỚI] CSS cho nút Lùi lại --- */
+        .back-button {
+            background: var(--card-bg-color);
+            padding-left: 0;
+            position: absolute;
+            bottom: 40px;
+            right: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            height: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            border: 2px solid var(--secondary-text-color);
+            border-radius: 50%;
+            /* Thuộc tính quan trọng nhất để tạo hình tròn */
+            color: var(--primary-text-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1.8s forwards;
+            z-index: 3;
+        }
+
+        .back-button:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(34, 211, 238, 0.3);
+        }
+
+        /* --- Hiệu ứng Animation --- */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 900px) {
+            .infographic {
+                flex-direction: column;
+            }
+
+            .infographic-arrow i {
+                transform: rotate(90deg);
+            }
+
+            .inevitability-grid {
+                grid-template-columns: 1fr;
+            }
+
+            #mindmap-container {
+                transform: scale(0.8);
+                height: 70vh;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .slide-container {
+                padding: 20px;
+                justify-content: space-around;
+            }
+
+            .logo {
+                top: 20px;
+                right: 20px;
+                width: 80px;
+            }
+
+            .next-button {
+                bottom: 20px;
+                right: 50%;
+                transform: translateX(50%);
+            }
+
+            .main-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                border-radius: 20px;
+                padding: 0.5rem;
+            }
+
+            .main-nav a {
+                font-size: 0.8rem;
+                padding: 0.5rem 0.75rem;
+            }
+
+            .inevitability-card {
+                padding: 1rem;
+            }
+
+            .inevitability-card h3 {
+                font-size: 1rem;
+            }
+
+            .inevitability-card p {
+                font-size: 0.8rem;
+            }
+
+            #content-tat-yeu .conclusion-text {
+                font-size: 0.9rem;
+            }
+
+            #mindmap-container {
+                transform: scale(0.65);
+                margin-top: -5vh;
+            }
+        }
+
+        /* Ẩn bong bóng chữ khi nhánh được chọn */
+        #mindmap-container.zoomed-in .mm-branch.active .mm-main-node {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-20px);
+            /* Thêm hiệu ứng trượt nhẹ lên khi ẩn đi */
+        }
+
+        /* Hiệu ứng hover cho các icon con */
+        .mm-sub-nodes li .icon:hover {
+            transform: scale(1.2);
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Đổi màu nền và viền cho vòng tròn icon khi nhánh được chọn */
+        .mm-branch.active .mm-infographic-icon {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: scale(1.1);
+            /* Có thể thêm hiệu ứng phóng to nhẹ cho chính icon */
+        }
+
+        /* Đổi màu của biểu tượng (chữ i) bên trong thành màu trắng để nổi bật */
+        .mm-branch.active .mm-infographic-icon i {
+            color: var(--primary-text-color);
+        }
+
+        #mindmap-container.zoomed-in .mm-branch.active .mm-sub-nodes {
+            top: 60px;
+            /* Di chuyển tâm xoay lên giữa icon (vì icon cao 80px) */
+        }
+
+        /* Thêm hiệu ứng bóng mờ cho các icon con khi nhánh được chọn */
+        #mindmap-container.zoomed-in .mm-branch.active .mm-sub-nodes li .icon {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Thêm hiệu ứng hover cho cả cụm icon và chữ của lợi ích con */
+        .mm-sub-nodes li:hover span {
+            background-color: var(--sub-item-hover-color);
+            /* Dùng màu hover đã định nghĩa */
+            border-color: var(--sub-item-hover-color);
+            color: var(--primary-text-color);
+            /* Giữ màu chữ trắng */
+        }
+
+        /* (Tùy chọn) Làm icon cũng to lên một chút khi hover */
+        .mm-sub-nodes li:hover .icon {
+            transform: scale(1.1);
+        }
+
+        /* BẬT LẠI TƯƠNG TÁC CHUỘT CHO CÁC ICON CON KHI HIỂN THỊ */
+        #mindmap-container.zoomed-in .mm-branch.active .mm-sub-nodes {
+            pointer-events: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="particle-container"></div>
+
+    <div class="slide-container">
+        <div class="logo">
+            <!-- Thay thế bằng đường dẫn logo của bạn -->
+            <img src="Image/logo.png" alt="Logo">
+        </div>
+
+        <header class="slide-header">
+            <h1>Khái quát chuyển đổi số</h1>
+        </header>
+
+        <main class="main-content">
+            <!-- Phần 1: Khái niệm -->
+            <section id="content-khai-niem" class="content-section active">
+                <div class="infographic">
+                    <div class="infographic-card">
+                        <i class='bx bx-chip'></i>
+                        <p>Tích hợp<br>Công nghệ số</p>
+                    </div>
+                    <div class="infographic-arrow"><i class='bx bx-right-arrow-alt'></i></div>
+                    <div class="infographic-card">
+                        <i class='bx bx-buildings'></i>
+                        <p>Vào mọi khía cạnh<br>Tổ chức & Doanh nghiệp</p>
+                    </div>
+                    <div class="infographic-arrow"><i class='bx bx-right-arrow-alt'></i></div>
+                    <div class="infographic-card">
+                        <i class='bx bx-bulb'></i>
+                        <p>Thay đổi cách hoạt động<br>Tạo ra giá trị mới</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Phần 2: Tính tất yếu -->
+            <section id="content-tat-yeu" class="content-section">
+                <div class="inevitability-grid">
+                    <div class="inevitability-card">
+                        <div class="icon"><i class='bx bx-globe'></i></div>
+                        <h3>Xu thế Toàn cầu hóa</h3>
+                        <p>Nâng cao năng lực cạnh tranh, hội nhập mạnh mẽ vào nền kinh tế số.</p>
+                    </div>
+                    <div class="inevitability-card">
+                        <div class="icon"><i class='bx bxs-bot'></i></div>
+                        <h3>Cách mạng Công nghiệp 4.0</h3>
+                        <p>Thích ứng với công nghệ mới (AI, IoT) để nâng cao hiệu suất và chất lượng.</p>
+                    </div>
+                    <div class="inevitability-card">
+                        <div class="icon"><i class='bx bx-user-voice'></i></div>
+                        <h3>Thay đổi Kỳ vọng Con người</h3>
+                        <p>Đáp ứng nhu cầu về dịch vụ tiện lợi, cá nhân hóa và nhanh chóng.</p>
+                    </div>
+                    <div class="inevitability-card">
+                        <div class="icon"><i class='bx bx-line-chart'></i></div>
+                        <h3>Động lực Kinh tế - Xã hội</h3>
+                        <p>Thúc đẩy tăng trưởng bền vững, tối ưu quản trị và phục vụ nhân dân.</p>
+                    </div>
+                </div>
+                <div class="conclusion-text">
+                    "Chuyển đổi số không còn là lựa chọn, mà là <span>yêu cầu tất yếu</span> để phát triển bền vững và
+                    hội nhập."
+                </div>
+            </section>
+
+            <!-- Phần 3: Giá trị -->
+            <section id="content-gia-tri" class="content-section">
+                <div class="value-pillars-container">
+                    <div class="value-pillar-card">
+                        <div class="icon"><i class='bx bx-group'></i></div>
+                        <h3>Con người</h3>
+                        <p>Nâng cao nhận thức, trang bị kỹ năng số và xây dựng văn hóa đổi mới.</p>
+                    </div>
+                    <div class="value-pillar-card">
+                        <div class="icon"><i class='bx bx-sitemap'></i></div>
+                        <h3>Thể chế</h3>
+                        <p>Hành lang pháp lý đồng bộ và chính sách hỗ trợ, tạo môi trường thuận lợi.</p>
+                    </div>
+                    <div class="value-pillar-card">
+                        <div class="icon"><i class='bx bx-server'></i></div>
+                        <h3>Công nghệ</h3>
+                        <p>Hạ tầng số hiện đại, nền tảng phù hợp và giải pháp bảo mật an toàn.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Phần 4: Lợi ích (ĐÃ CẬP NHẬT V3 - ĐỐI XỨNG) -->
+            <section id="content-loi-ich" class="content-section">
+                <div id="mindmap-container">
+                    <div class="mm-center-node">LỢI ÍCH</div>
+
+                    <div class="mm-branch" id="mm-hieu-suat">
+                        <div class="mm-infographic-icon"><i class='bx bx-line-chart'></i></div>
+                        <div class="mm-main-node">Hiệu suất công việc</div>
+                        <ul class="mm-sub-nodes">
+                            <li>
+                                <div class="icon"><i class='bx bxs-like'></i></div><span>Cộng tác dễ dàng</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-share-alt'></i></div><span>Chia sẻ tài liệu</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-wrench'></i></div><span>Công cụ hỗ trợ</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-rocket'></i></div><span>Tiếp cận nhanh</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-user-check'></i></div><span>Cá nhân hóa</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mm-branch" id="mm-thoi-gian">
+                        <div class="mm-infographic-icon"><i class='bx bx-timer'></i></div>
+                        <div class="mm-main-node">Tiết kiệm thời gian</div>
+                        <ul class="mm-sub-nodes">
+                            <li>
+                                <div class="icon"><i class='bx bx-bot'></i></div><span>Tự động hóa</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-search-alt'></i></div><span>Tra cứu nhanh</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-sync'></i></div><span>Đồng bộ</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-wifi'></i></div><span>Làm việc online</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-file-blank'></i></div><span>Giảm thủ tục</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mm-branch" id="mm-chi-phi">
+                        <div class="mm-infographic-icon"><i class='bx bxs-dollar-circle'></i></div>
+                        <div class="mm-main-node">Tiết kiệm chi phí</div>
+                        <ul class="mm-sub-nodes">
+                            <li>
+                                <div class="icon"><i class='bx bx-sitemap'></i></div><span>Giảm quản lí</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-server'></i></div><span>Ít máy móc</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bxs-file-doc'></i></div><span>Ít giấy tờ</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-data'></i></div><span>Số hóa dữ liệu</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mm-branch" id="mm-minh-bach">
+                        <div class="mm-infographic-icon"><i class='bx bx-show'></i></div>
+                        <div class="mm-main-node">Minh bạch</div>
+                        <ul class="mm-sub-nodes">
+                            <li>
+                                <div class="icon"><i class='bx bx-book-open'></i></div><span>Số hóa</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-git-branch'></i></div><span>Quy trình rõ ràng</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-wifi-2'></i></div><span>Công khai</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-user-x'></i></div><span>Giảm "Xin-cho"</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mm-branch" id="mm-hoi-nhap">
+                        <div class="mm-infographic-icon"><i class='bx bx-bulb'></i></div>
+                        <div class="mm-main-node">Sáng tạo & Hội nhập</div>
+                        <ul class="mm-sub-nodes">
+                            <li>
+                                <div class="icon"><i class='bx bx-atom'></i></div><span>Môi trường mở</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-globe'></i></div><span>Tri thức toàn cầu</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-chip'></i></div><span>Công cụ số, AI</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-transfer-alt'></i></div><span>Kết nối xuyên biên
+                                    giới</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mm-branch" id="mm-bao-mat">
+                        <div class="mm-infographic-icon"><i class='bx bx-shield-alt-2'></i></div>
+                        <div class="mm-main-node">Bảo mật</div>
+                        <ul class="mm-sub-nodes">
+                            <li>
+                                <div class="icon"><i class='bx bx-lock-alt'></i></div><span>Mã hóa</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-shield-quarter'></i></div><span>Xác thực nhiều
+                                    lớp</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-bell'></i></div><span>Cảnh báo tự động</span>
+                            </li>
+                            <li>
+                                <div class="icon"><i class='bx bx-history'></i></div><span>Sao lưu & khôi phục</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <nav class="main-nav">
+            <a href="#khai-niem" class="nav-link active">Khái niệm</a>
+            <a href="#tat-yeu" class="nav-link">Tính tất yếu</a>
+            <a href="#gia-tri" class="nav-link">Giá trị</a>
+            <a href="#loi-ich" class="nav-link">Lợi ích</a>
+        </nav>
+        <a href="index.html" class="back-button">◁</a>
+        <a href="slide3.html" class="next-button">▷</a>
+    </div>
+
+    <script>
+        // --- Tạo các hạt nền ---
+        const particleContainer = document.getElementById('particle-container');
+        if (particleContainer) {
+            const particleCount = 50;
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                const size = Math.random() * 4 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.left = `${Math.random() * 100}%`;
+                const delay = Math.random() * 25;
+                const duration = Math.random() * 15 + 10;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.animationDuration = `${duration}s`;
+                particleContainer.appendChild(particle);
+            }
+        }
+
+        // --- Logic cho Menu điều hướng ---
+        const navLinks = document.querySelectorAll('.nav-link');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                const currentActiveLink = document.querySelector('.nav-link.active');
+                const currentActiveSection = document.querySelector('.content-section.active');
+
+                if (currentActiveLink) currentActiveLink.classList.remove('active');
+                if (currentActiveSection) currentActiveSection.classList.remove('active');
+
+                link.classList.add('active');
+                const targetId = `content-${link.getAttribute('href').substring(1)}`;
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+            });
+        });
+
+        // --- Logic cho Sơ đồ tư duy ---
+        const mindmapContainer = document.getElementById('mindmap-container');
+        if (mindmapContainer) {
+            const branches = mindmapContainer.querySelectorAll('.mm-branch');
+
+            branches.forEach(branch => {
+                branch.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const isActive = branch.classList.contains('active');
+
+                    if (isActive) {
+                        mindmapContainer.classList.remove('zoomed-in');
+                        branch.classList.remove('active');
+                        return;
+                    }
+
+                    branches.forEach(b => b.classList.remove('active'));
+
+                    mindmapContainer.classList.add('zoomed-in');
+                    branch.classList.add('active');
+                });
+            });
+
+            mindmapContainer.addEventListener('click', () => {
+                if (mindmapContainer.classList.contains('zoomed-in')) {
+                    mindmapContainer.classList.remove('zoomed-in');
+                    branches.forEach(b => b.classList.remove('active'));
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 4: Đề xuất giải pháp Chuyển đổi số</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        :root {
+            --gradient-start: #3b82f6;
+            --gradient-end: #8b5cf6;
+            --primary-text-color: #ffffff;
+            --secondary-text-color: rgba(255, 255, 255, 0.85);
+            --accent-color: #22d3ee;
+            --particle-color: rgba(255, 255, 255, 0.5);
+            --card-bg-color: rgba(158, 152, 233, 0.486);
+            --card-border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--primary-text-color);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .slide-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .logo {
+            width: 80px;
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 150px;
+            z-index: 10;
+        }
+
+        .logo img {
+            width: 80px;
+            height: auto;
+        }
+
+        .slide-header {
+            width: 100%;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.2s forwards;
+        }
+
+        .slide-header h1 {
+            font-size: clamp(2.2rem, 4vw, 3.5rem);
+            font-weight: 900;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .main-content {
+            transform: scale(0.8);
+            transform-origin: center;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+        }
+
+        .content-section {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .content-section.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 2;
+        }
+
+        @keyframes cardEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes hubEntrance {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes itemEntrance {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- Phần Học tập & Rèn luyện --- */
+        .solution-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            width: 100%;
+        }
+
+        .solution-card,
+        .summary-box {
+            opacity: 0;
+        }
+
+        .content-section.start-animation .solution-card,
+        .content-section.start-animation .summary-box {
+            animation: cardEntrance 0.6s ease-out forwards;
+        }
+
+        .content-section.start-animation .solution-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .content-section.start-animation .solution-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .content-section.start-animation .solution-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .content-section.start-animation .solution-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .content-section.start-animation .solution-card:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .content-section.start-animation .solution-card:nth-child(6) {
+            animation-delay: 0.6s;
+        }
+
+        .content-section.start-animation .summary-box {
+            animation-delay: 0.7s;
+        }
+
+        .solution-card {
+            background: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 20px;
+            padding: 1.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            min-height: 180px;
+        }
+
+        .solution-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            border-color: var(--accent-color);
+            background-color: rgba(34, 211, 238, 0.1);
+        }
+
+        .solution-card .icon {
+            font-size: 5rem;
+            color: var(--accent-color);
+        }
+
+        .solution-card span {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .summary-box {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            padding: 1.4rem 2rem;
+            font-size: 1.2rem;
+            line-height: 1.7;
+            text-align: center;
+            color: var(--secondary-text-color);
+            max-width: 100%;
+        }
+
+        .summary-box span {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        /* --- Cấu trúc Modal --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(89, 75, 105, 0.379);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: transparent;
+            border: none;
+            padding: 1rem;
+            width: 90%;
+            max-width: 950px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.8);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        #modal-apps-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 7rem;
+            padding: 1rem 0;
+        }
+
+        .app-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            width: 110px;
+            opacity: 0;
+            animation: popIn 0.5s ease-out forwards;
+        }
+
+        .app-logo-frame {
+            width: 140px;
+            height: 140px;
+            background: var(--card-bg-color);
+            border: 5px solid white;
+            border-radius: 18px;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .app-item:hover .app-logo-frame {
+            transform: scale(1.1);
+            border-color: var(--accent-color);
+        }
+
+        .app-logo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .app-name {
+            font-size: 1.6rem;
+            font-weight: 500;
+            width: 100%;
+            text-align: center;
+            color: var(--secondary-text-color);
+        }
+
+        #modal-text-container {
+            background-color: rgba(78, 114, 222, 0.352);
+            backdrop-filter: blur(12px);
+            border: 5px solid var(--card-border-color);
+            border-radius: 16px;
+            padding: 2rem 2.5rem;
+            font-size: 1.6rem;
+            line-height: 1.7;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* --- Menu điều hướng --- */
+        .main-nav {
+            display: flex;
+            gap: 1rem;
+            background: var(--card-bg-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid var(--card-border-color);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.8s forwards;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .main-nav a {
+            color: var(--secondary-text-color);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .main-nav a.active,
+        .main-nav a:hover {
+            color: var(--primary-text-color);
+            background-color: var(--accent-color);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px) scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* --- Phần Sinh hoạt Chi bộ --- */
+        .party-activity-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            grid-template-areas:
+                ". item-1 ."
+                "item-4 hub item-2"
+                ". item-3 .";
+            width: 100%;
+            max-width: 1250px;
+            height: 550px;
+            align-items: center;
+            justify-items: center;
+            gap: 1.5rem;
+        }
+
+        .central-hub,
+        .solution-item {
+            opacity: 0;
+        }
+
+        .content-section.start-animation .central-hub {
+            animation: hubEntrance 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation-delay: 0.1s;
+        }
+
+        .content-section.start-animation .solution-item {
+            animation: itemEntrance 0.6s ease-out forwards;
+        }
+
+        .content-section.start-animation .item-1 {
+            animation-delay: 0.5s;
+        }
+
+        .content-section.start-animation .item-2 {
+            animation-delay: 0.6s;
+        }
+
+        .content-section.start-animation .item-3 {
+            animation-delay: 0.7s;
+        }
+
+        .content-section.start-animation .item-4 {
+            animation-delay: 0.8s;
+        }
+
+        .central-hub {
+            grid-area: hub;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hub-image-container {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.1), 0 0 0 20px rgba(255, 255, 255, 0.05);
+        }
+
+        .hub-image-container img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .solution-item {
+            background: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 16px;
+            padding: 1.3rem;
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            height: auto;
+            min-height: 80px;
+            width: 400px;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .solution-item:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .solution-icon {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            background: rgba(34, 211, 238, 0.1);
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .solution-text h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            text-align: left;
+        }
+
+        .solution-text p {
+            font-size: 1.1rem;
+            color: var(--secondary-text-color);
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        .solution-item.item-1 {
+            grid-area: item-1;
+        }
+
+        .solution-item.item-2 {
+            grid-area: item-2;
+        }
+
+        .solution-item.item-3 {
+            grid-area: item-3;
+        }
+
+        .solution-item.item-4 {
+            grid-area: item-4;
+        }
+
+        /* --- Nút Tiếp tục --- */
+        .next-button {
+            background: var(--card-bg-color);
+            padding-right: 0;
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            height: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            border: 2px solid var(--secondary-text-color);
+            border-radius: 50%;
+            /* Thuộc tính quan trọng nhất để tạo hình tròn */
+            color: var(--primary-text-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1.8s forwards;
+            z-index: 3;
+        }
+
+        .next-button:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(34, 211, 238, 0.3);
+        }
+
+        /* --- [THÊM MỚI] CSS cho nút Lùi lại --- */
+        .back-button {
+            background: var(--card-bg-color);
+            padding-left: 0;
+            position: absolute;
+            bottom: 40px;
+            right: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            height: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            border: 2px solid var(--secondary-text-color);
+            border-radius: 50%;
+            /* Thuộc tính quan trọng nhất để tạo hình tròn */
+            color: var(--primary-text-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1.8s forwards;
+            z-index: 3;
+        }
+
+        .back-button:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(34, 211, 238, 0.3);
+        }
+
+
+        @media (max-width: 900px) {
+            .party-activity-layout {
+                display: flex;
+                flex-direction: column;
+                height: auto;
+                gap: 1.5rem;
+            }
+
+            .central-hub {
+                order: -1;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="particle-container"></div>
+    <div class="slide-container">
+        <div class="logo">
+            <img src="Image/logo.png" alt="Logo">
+        </div>
+        <header class="slide-header">
+            <h1>Đề xuất giải pháp Chuyển đổi số</h1>
+        </header>
+        <main class="main-content">
+            <section id="content-hoc-tap" class="content-section active">
+                <div class="solution-layout">
+                    <div class="solution-grid">
+                        <div class="solution-card"
+                            data-text="Hỗ trợ tìm kiếm thông tin, tóm tắt, luyện viết, giải thích khái niệm, hỗ trợ lập trình."
+                            data-apps="ChatGPT:Image/chatgpt.png,Gemini:Image/gemini.png,Blackbox:Image/blackbox.png">
+                            <i class='bx bxs-bot icon'></i><span>AI Hỗ trợ học tập</span>
+                        </div>
+                        <div class="solution-card"
+                            data-text="Tìm kiếm, tải và tham khảo bài báo, tạp chí, công trình nghiên cứu."
+                            data-apps="Google Scholar:Image/ggscholar.png,IEEE Xplore:Image/ieee.png,Research Gate:Image/researchgate.png">
+                            <i class='bx bxs-book-bookmark icon'></i><span>Nguồn học liệu</span>
+                        </div>
+                        <div class="solution-card"
+                            data-text="Trao đổi học tập, liên hệ giảng viên; hỗ trợ ghim tin, phân loại, nhắc lịch và hẹn giờ gửi."
+                            data-apps="Zalo:Image/zalo.png,Gmail:Image/gmail.png">
+                            <i class='bx bxs-conversation icon'></i><span>Giao tiếp & Trao đổi</span>
+                        </div>
+                        <div class="solution-card"
+                            data-text="Tổ chức bài học, theo dõi tiến độ, ghi nhớ lịch học và deadline."
+                            data-apps="Notion:Image/notion.png,Trello:Image/trello.png,To-Do:Image/todo.png,Google Calendar:Image/ggcalendar.png">
+                            <i class='bx bxs-calendar-check icon'></i><span>Quản lý công việc</span>
+                        </div>
+                        <div class="solution-card"
+                            data-text="Lưu trữ đám mây → Quản lý, chia sẻ tài liệu, bài tập và hồ sơ học tập an toàn, tiện lợi."
+                            data-apps="Google Drive:Image/ggdrive.png,OneDrive:Image/onedrive.png">
+                            <i class='bx bxs-cloud-upload icon'></i><span>Lưu trữ dữ liệu</span>
+                        </div>
+                        <div class="solution-card"
+                            data-text="Tạo web/app theo nhu cầu cá nhân mà không cần biết lập trình."
+                            data-apps="Google Sites:Image/ggsites.png,AppSheet:Image/appsheet.png,Notion Page:Image/notion.png">
+                            <i class='bx bxs-extension icon'></i><span>Tự thiết kế ứng dụng</span>
+                        </div>
+                    </div>
+                    <div class="summary-box">
+                        <span>Tăng cường</span> sử dụng hệ thống quản lý học tập trực tuyến, khai thác thư viện số.
+                        <span>Ứng dụng</span> công cụ AI, Notion, Google Calendar để quản lý. <span>Tổ chức</span> tập
+                        huấn kỹ năng số và <span>đẩy mạnh</span> số hóa trong theo dõi kết quả.
+                    </div>
+                </div>
+            </section>
+            <section id="content-sinh-hoat" class="content-section">
+                <div class="party-activity-layout">
+                    <div class="central-hub">
+                        <div class="hub-image-container">
+                            <img src="https://placehold.co/180x180/FFFFFF/3b82f6?text=Chi+bộ+số"
+                                alt="Trung tâm Chi bộ số">
+                        </div>
+                    </div>
+                    <div class="solution-item item-1">
+                        <div class="solution-icon"><i class='bx bxs-video-plus'></i></div>
+                        <div class="solution-text">
+                            <h3>Họp tổ trực tuyến</h3>
+                            <p>Đảm bảo hiệu quả, minh bạch và đúng quy trình.</p>
+                        </div>
+                    </div>
+                    <div class="solution-item item-2">
+                        <div class="solution-icon"><i class='bx bxs-bar-chart-alt-2'></i></div>
+                        <div class="solution-text">
+                            <h3>Báo cáo & Dữ liệu</h3>
+                            <p>Tích hợp báo cáo tháng trên nền tảng số thống nhất.</p>
+                        </div>
+                    </div>
+                    <div class="solution-item item-3">
+                        <div class="solution-icon"><i class='bx bxs-archive-in'></i></div>
+                        <div class="solution-text">
+                            <h3>Lưu trữ & Bảo mật</h3>
+                            <p>Hệ thống văn bản điện tử an toàn, dễ dàng tra cứu.</p>
+                        </div>
+                    </div>
+                    <div class="solution-item item-4">
+                        <div class="solution-icon"><i class='bx bxs-user-check'></i></div>
+                        <div class="solution-text">
+                            <h3>Nâng cao Năng lực</h3>
+                            <p>Tập huấn kỹ năng, rèn luyện thói quen làm việc số.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <nav class="main-nav">
+            <a href="#hoc-tap" class="nav-link active">Học tập & Rèn luyện</a>
+            <a href="#sinh-hoat" class="nav-link">Sinh hoạt Chi bộ</a>
+        </nav>
+        <a href="slide3.html" class="back-button">◁</a>
+        <!-- [THÊM MỚI] HTML cho nút Tiếp tục -->
+        <a href="slide5.html" class="next-button">▷</a>
+    </div>
+
+    <div id="solution-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div id="modal-apps-container"></div>
+            <div id="modal-text-container"></div>
+        </div>
+    </div>
+
+    <script>
+        const mainNavLinks = document.querySelectorAll('.main-nav .nav-link');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        function activateTab(link) {
+            mainNavLinks.forEach(l => l.classList.remove('active'));
+            contentSections.forEach(s => {
+                s.classList.remove('active');
+                s.classList.remove('start-animation');
+            });
+
+            link.classList.add('active');
+            const targetId = `content-${link.getAttribute('href').substring(1)}`;
+            const targetSection = document.getElementById(targetId);
+
+            if (targetSection) {
+                targetSection.classList.add('active');
+                setTimeout(() => {
+                    targetSection.classList.add('start-animation');
+                }, 10);
+            }
+        }
+
+        mainNavLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                activateTab(link);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const activeLink = document.querySelector('.main-nav .nav-link.active');
+            if (activeLink) {
+                setTimeout(() => {
+                    const activeSection = document.querySelector('.content-section.active');
+                    if (activeSection) {
+                        activeSection.classList.add('start-animation');
+                    }
+                }, 200);
+            }
+        });
+
+        const solutionCards = document.querySelectorAll('.solution-card');
+        const modal = document.getElementById('solution-modal');
+        if (modal) {
+            const modalTextContainer = document.getElementById('modal-text-container');
+            const modalAppsContainer = document.getElementById('modal-apps-container');
+
+            solutionCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const text = card.dataset.text;
+                    const appsData = card.dataset.apps ? card.dataset.apps.split(',') : [];
+
+                    modalTextContainer.textContent = text;
+                    modalAppsContainer.innerHTML = '';
+
+                    if (appsData.length > 0) {
+                        appsData.forEach((appString, index) => {
+                            const [appName, appSrc] = appString.split(':');
+                            const appItem = document.createElement('div');
+                            appItem.className = 'app-item';
+                            const logoFrame = document.createElement('div');
+                            logoFrame.className = 'app-logo-frame';
+                            const img = document.createElement('img');
+                            img.src = appSrc;
+                            img.alt = `Logo ${appName}`;
+                            img.className = 'app-logo';
+                            img.onerror = () => { img.src = `https://placehold.co/90x90/3b82f6/ffffff?text=${appName.charAt(0)}`; };
+                            const nameSpan = document.createElement('span');
+                            nameSpan.className = 'app-name';
+                            nameSpan.textContent = appName;
+
+                            logoFrame.appendChild(img);
+                            appItem.appendChild(logoFrame);
+                            appItem.appendChild(nameSpan);
+
+                            appItem.style.animationDelay = `${index * 0.1}s`;
+
+                            modalAppsContainer.appendChild(appItem);
+                        });
+                    }
+                    modal.classList.add('active');
+                });
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                }
+            });
+        }
+
+        const particleContainer = document.getElementById('particle-container');
+        if (particleContainer) {
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.style.cssText = `position:absolute;width:${Math.random() * 3 + 1}px;height:${Math.random() * 3 + 1}px;background:var(--particle-color);border-radius:50%;top:${Math.random() * 100}%;left:${Math.random() * 100}%;animation:float ${Math.random() * 15 + 10}s infinite ease-in-out;animation-delay:${Math.random() * 20}s;opacity:0;`;
+                particleContainer.appendChild(p);
+            }
+            if (!document.querySelector('style[data-anim="float"]')) {
+                const s = document.createElement("style"); s.setAttribute('data-anim', 'float'); s.innerText = `@keyframes float{0%{transform:translateY(0);opacity:0}25%{opacity:1}50%{transform:translateY(-15vh)}75%{opacity:1}100%{transform:translateY(0);opacity:0}}`; document.head.appendChild(s);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

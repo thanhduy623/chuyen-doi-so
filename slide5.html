@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 5: Kết luận</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        :root {
+            --gradient-start: #3b82f6;
+            --gradient-end: #8b5cf6;
+            --primary-text-color: #ffffff;
+            --secondary-text-color: rgba(255, 255, 255, 0.85);
+            --accent-color: #22d3ee;
+            --particle-color: rgba(255, 255, 255, 0.5);
+            --card-bg-color: rgba(255, 255, 255, 0.1);
+            --card-border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--primary-text-color);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .slide-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .logo {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 150px;
+            z-index: 10;
+        }
+
+        .logo img {
+            width: 80px;
+            height: auto;
+        }
+
+        .conclusion-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3rem;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .conclusion-header {
+            opacity: 0;
+            animation: popIn 0.8s ease-out 0.5s forwards;
+        }
+
+        .conclusion-header h1 {
+            font-size: clamp(2.5rem, 4.5vw, 4rem);
+            font-weight: 900;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            margin-bottom: 0.5rem;
+        }
+
+        .conclusion-header .divider {
+            width: 100px;
+            height: 4px;
+            background-color: var(--accent-color);
+            margin: 0 auto;
+            border-radius: 2px;
+        }
+
+        .conclusion-grid {
+            transform: scale(0.8);
+            transform-origin: center;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            width: 100%;
+        }
+
+        .conclusion-card {
+            background: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            text-align: left;
+            opacity: 0;
+            /* Trạng thái ban đầu */
+        }
+
+        /* Hiệu ứng xuất hiện tuần tự */
+        .conclusion-card:nth-child(1) {
+            animation: popIn 0.7s ease-out 1.0s forwards;
+        }
+
+        .conclusion-card:nth-child(2) {
+            animation: popIn 0.7s ease-out 1.2s forwards;
+        }
+
+        .conclusion-card:nth-child(3) {
+            animation: popIn 0.7s ease-out 1.4s forwards;
+        }
+
+        .conclusion-card:nth-child(4) {
+            animation: popIn 0.7s ease-out 1.6s forwards;
+        }
+
+        .conclusion-icon {
+            font-size: 5rem;
+            color: var(--accent-color);
+        }
+
+        .conclusion-text h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .conclusion-text p {
+            font-size: 1.3rem;
+            color: var(--secondary-text-color);
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .end-button {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            /* Use flex to center content */
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 60px;
+            background: var(--card-bg-color);
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            /* Makes the button circular */
+            color: var(--primary-text-color);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            z-index: 3;
+        }
+
+        .end-button:hover {
+            background-color: transparent;
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(34, 211, 238, 0.3);
+        }
+
+        .back-button {
+            background: var(--card-bg-color);
+            position: absolute;
+            bottom: 40px;
+            right: 120px;
+            /* Adjust position to be to the left of end-button */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            height: 60px;
+            border: 2px solid var(--secondary-text-color);
+            border-radius: 50%;
+            /* Makes the button circular */
+            color: var(--primary-text-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            z-index: 3;
+        }
+
+        .back-button:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(34, 211, 238, 0.3);
+        }
+
+
+        /* Keyframes */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1000px) {
+            .conclusion-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .slide-container {
+                padding: 20px;
+            }
+
+            .conclusion-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .conclusion-text h3 {
+                font-size: 1.3rem;
+            }
+
+            .conclusion-text p {
+                font-size: 1rem;
+            }
+
+            .end-button {
+                right: 50%;
+                transform: translateX(50%);
+                bottom: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="particle-container"></div>
+    <div class="slide-container">
+        <div class="logo">
+            <img src="Image/logo.png" alt="Logo">
+        </div>
+
+        <div class="conclusion-layout">
+            <header class="conclusion-header">
+                <h1>Thông điệp kết luận</h1>
+                <div class="divider"></div>
+            </header>
+
+            <div class="conclusion-grid">
+                <div class="conclusion-card">
+                    <i class='bx bxs-error-circle conclusion-icon'></i>
+                    <div class="conclusion-text">
+                        <h3>Yêu cầu Cấp bách</h3>
+                        <p>Chuyển đổi số không chỉ là xu thế mà còn là yêu cầu mang tính chiến lược, quyết định sự phát
+                            triển.</p>
+                    </div>
+                </div>
+                <div class="conclusion-card">
+                    <i class='bx bxs-map-alt conclusion-icon'></i>
+                    <div class="conclusion-text">
+                        <h3>Lộ trình Phù hợp</h3>
+                        <p>Chi bộ cần xây dựng lộ trình chuyển đổi số rõ ràng, phù hợp với điều kiện và mục tiêu cụ thể.
+                        </p>
+                    </div>
+                </div>
+                <div class="conclusion-card">
+                    <i class='bx bx-walk conclusion-icon'></i>
+                    <div class="conclusion-text">
+                        <h3>Bước đi Thực tiễn</h3>
+                        <p>Ứng dụng công nghệ gắn liền với nhu cầu thực tế, triển khai từng bước, tránh nóng vội, hình
+                            thức.</p>
+                    </div>
+                </div>
+                <div class="conclusion-card">
+                    <i class='bx bxs-user-badge conclusion-icon'></i>
+                    <div class="conclusion-text">
+                        <h3>Con người là Trung tâm</h3>
+                        <p>Không ngừng nâng cao nhận thức và trang bị kỹ năng số cần thiết cho mỗi Đảng viên.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="slide4.html" class="back-button">◁</a>
+        <a href="slide6.html" class="end-button">✔</a>
+    </div>
+
+    <script>
+        // --- Nền hạt ---
+        const particleContainer = document.getElementById('particle-container');
+        if (particleContainer) {
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.style.cssText = `position:absolute;width:${Math.random() * 3 + 1}px;height:${Math.random() * 3 + 1}px;background:var(--particle-color);border-radius:50%;top:${Math.random() * 100}%;left:${Math.random() * 100}%;animation:float ${Math.random() * 15 + 10}s infinite ease-in-out;animation-delay:${Math.random() * 20}s;opacity:0;`;
+                particleContainer.appendChild(p);
+            }
+            if (!document.querySelector('style[data-anim="float"]')) {
+                const s = document.createElement("style"); s.setAttribute('data-anim', 'float'); s.innerText = `@keyframes float{0%{transform:translateY(0);opacity:0}25%{opacity:1}50%{transform:translateY(-15vh)}75%{opacity:1}100%{transform:translateY(0);opacity:0}}`; document.head.appendChild(s);
+            }
+        }
+    </script>
+</body>
+
+</html>

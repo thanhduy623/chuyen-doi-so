@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 3: Thực trạng Chuyển đổi số ở Việt Nam</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        /* --- Bảng màu đồng bộ với slide 2 --- */
+        :root {
+            --gradient-start: #3b82f6;
+            --gradient-end: #8b5cf6;
+            --primary-text-color: #ffffff;
+            --secondary-text-color: rgba(255, 255, 255, 0.85);
+            --accent-color: #22d3ee;
+            --particle-color: rgba(255, 255, 255, 0.5);
+            --card-bg-color: rgba(255, 255, 255, 0.1);
+            --card-border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--primary-text-color);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- Nền hạt chuyển động (Giữ nguyên) --- */
+        #particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* --- Bố cục chính --- */
+        .slide-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            /* Giãn cách các phần tử */
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            padding: 40px;
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        /* --- Logo (Cập nhật vị trí & kích thước) --- */
+        .logo {
+            position: absolute;
+            width: 80px;
+            top: 40px;
+            right: 40px;
+            /* Chuyển sang phải */
+            width: 150px;
+            /* Tăng kích thước */
+            z-index: 10;
+        }
+
+        .logo img {
+            width: 80px;
+            height: auto;
+        }
+
+        /* --- Header (tiêu đề) --- */
+        .slide-header {
+            width: 100%;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.2s forwards;
+        }
+
+        .slide-header h1 {
+            font-size: clamp(2.2rem, 4vw, 3.5rem);
+            font-weight: 900;
+            text-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* --- Vùng nội dung chính --- */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+        }
+
+        .content-section {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+        }
+
+        .content-section.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 2;
+        }
+
+        /* --- Grid cho các "Thách thức" (Cập nhật bố cục 4-3) --- */
+        .challenge-layout {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .challenge-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .challenge-bubble {
+            background: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 20px;
+            /* Bo góc hơn */
+            padding: 2rem;
+            /* Tăng padding */
+            width: 250px;
+            /* Kích thước cố định để cân đối */
+            min-height: 180px;
+            /* Tăng chiều cao tối thiểu */
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Delay animation cho các bubble */
+        #content-thach-thuc.active .challenge-bubble:nth-child(1) {
+            animation-delay: 0.4s;
+        }
+
+        #content-thach-thuc.active .challenge-bubble:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        #content-thach-thuc.active .challenge-bubble:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        #content-thach-thuc.active .challenge-bubble:nth-child(4) {
+            animation-delay: 0.7s;
+        }
+
+        #content-thach-thuc.active .challenge-bubble:nth-child(5) {
+            animation-delay: 0.8s;
+        }
+
+        #content-thach-thuc.active .challenge-bubble:nth-child(6) {
+            animation-delay: 0.9s;
+        }
+
+        #content-thach-thuc.active .challenge-bubble:nth-child(7) {
+            animation-delay: 1.0s;
+        }
+
+        /* --- Cập nhật hiệu ứng Hover --- */
+        .challenge-bubble:hover {
+            transform: translateY(-10px) scale(1.05);
+            border-color: var(--accent-color);
+            background-color: rgba(34, 211, 238, 0.1);
+        }
+
+        .challenge-bubble .icon {
+            font-size: 4rem;
+            /* Icon to hơn */
+            color: var(--accent-color);
+        }
+
+        .challenge-bubble span {
+            font-weight: bold;
+            font-size: 1.1rem;
+            /* Chữ to hơn */
+        }
+
+        /* --- Menu điều hướng (Cập nhật vị trí & style) --- */
+        .main-nav {
+            display: flex;
+            gap: 1rem;
+            background: var(--card-bg-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid var(--card-border-color);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.8s forwards;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        .main-nav a {
+            color: var(--secondary-text-color);
+            text-decoration: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .main-nav a.active,
+        .main-nav a:hover {
+            color: var(--primary-text-color);
+            background-color: var(--accent-color);
+        }
+
+        /* --- Modal (Cửa sổ Pop-up) (Cập nhật kích thước) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(165, 113, 234, 0.292);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #4a6aeb7e, #6c35cb70);
+            border: 1px solid var(--card-border-color);
+            padding: 2.5rem;
+            /* Tăng padding */
+            border-radius: 24px;
+            width: 90%;
+            max-width: 1100px;
+            /* Khung to hơn */
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.8);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        #modal-image-container {
+            display: flex;
+            justify-content: center;
+            gap: 8rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        #modal-image-container img {
+            /* ĐÂY LÀ CHỖ CẦN CHỈNH:        */
+            width: 320px;
+            /* Chỉnh chiều RỘNG của khung ảnh (ví dụ: 350px) */
+            height: 320px;
+            /* Chỉnh chiều CAO của khung ảnh (ví dụ: 250px) */
+
+            /* Thuộc tính này đảm bảo ảnh lấp đầy khung mà không bị méo.
+        Phần thừa của ảnh sẽ được cắt đi.
+        Bạn cũng có thể thử giá trị 'contain' (hiển thị toàn bộ ảnh, có thể có khoảng trống)
+        */
+            object-fit: cover;
+            border: 5px solid white;
+            /* Viền dày hơn */
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        #modal-text-container {
+            background-color: var(--card-bg-color);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            font-size: 1.6rem;
+            /* Chữ to hơn */
+            line-height: 1.7;
+            text-align: center;
+        }
+
+        /* --- Nút Tiếp tục --- */
+        .next-button {
+            background: var(--card-bg-color);
+            padding-right: 0;
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            height: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            border: 2px solid var(--secondary-text-color);
+            border-radius: 50%;
+            /* Thuộc tính quan trọng nhất để tạo hình tròn */
+            color: var(--primary-text-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1.8s forwards;
+            z-index: 3;
+        }
+
+        .next-button:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(34, 211, 238, 0.3);
+        }
+
+        /* --- [THÊM MỚI] CSS cho nút Lùi lại --- */
+        .back-button {
+            background: var(--card-bg-color);
+            padding-left: 0;
+            position: absolute;
+            bottom: 40px;
+            right: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            height: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            border: 2px solid var(--secondary-text-color);
+            border-radius: 50%;
+            /* Thuộc tính quan trọng nhất để tạo hình tròn */
+            color: var(--primary-text-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1.8s forwards;
+            z-index: 3;
+        }
+
+        .back-button:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(34, 211, 238, 0.3);
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- PHẦN 2: ĐỊNH HƯỚNG (MENU TRƯỢT) --- */
+        .orientation-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1000px;
+            gap: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        .orientation-intro {
+            background: rgba(0, 0, 0, 0.25);
+            padding: 1.5rem 2rem;
+            border-radius: 16px;
+            font-size: 1.5rem;
+            line-height: 1.6;
+            font-weight: 500;
+            width: 100%;
+            text-align: center;
+        }
+
+        .orientation-intro strong {
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .slider-nav-container {
+            width: 100%;
+            overflow-x: auto;
+            /* Ẩn thanh cuộn trên các trình duyệt phổ biến */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .slider-nav-container::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari, and Opera */
+        }
+
+        .slider-nav {
+            display: flex;
+            justify-content: flex-start;
+            /* Để bắt đầu từ bên trái */
+            padding-bottom: 15px;
+            /* Tạo khoảng trống để bóng không bị cắt */
+            gap: 1rem;
+            width: max-content;
+            /* Quan trọng: để các nút không bị xuống dòng */
+            margin: 0 auto;
+            /* Căn giữa nếu nội dung không tràn */
+        }
+
+        .slider-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid var(--card-border-color);
+            background-color: var(--card-bg-color);
+            color: var(--secondary-text-color);
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            /* Ngăn text xuống dòng */
+            flex-shrink: 0;
+            /* Ngăn nút bị co lại */
+        }
+
+        .slider-btn:hover {
+            background-color: rgba(34, 211, 238, 0.2);
+            border-color: var(--accent-color);
+            color: var(--primary-text-color);
+        }
+
+        .slider-btn.active {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            color: var(--primary-text-color);
+            box-shadow: 0 5px 15px rgba(34, 211, 238, 0.3);
+        }
+
+        .slider-content-container {
+            width: 100%;
+            min-height: 180px;
+            /* Chiều cao tối thiểu để không bị giật layout */
+            height: auto;
+            max-height: 300px;
+            /* Chiều cao tối đa */
+            background: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 16px;
+            padding: 1.0rem;
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .slider-content {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            right: 2rem;
+            bottom: 2rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            text-align: left;
+        }
+
+        .slider-content.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .slider-content h3 {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .slider-content p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+        }
+
+        .slider-content p strong {
+            color: #f8fafc;
+            /* Màu trắng sáng hơn để nổi bật */
+            font-weight: 700;
+        }
+
+        /* --- PHẦN 3: THÀNH TỰU --- */
+        .achievements-container {
+            transform: scale(0.8);
+            transform-origin: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            /* Rộng hơn để chứa biểu đồ */
+            gap: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        .achievements-nav .slider-nav {
+            padding-bottom: 5px;
+            /* Giảm padding để gọn hơn */
+        }
+
+        .achievements-content-container {
+            min-height: 450px;
+            /* Cao hơn để chứa biểu đồ và nội dung */
+            width: 100%;
+            background: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(12px);
+            position: relative;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .achievement-page {
+            display: grid;
+            gap: 2.5rem;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .achievement-page.layout-2-col {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .achievement-page.layout-3-col {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        .content-block {
+            text-align: left;
+        }
+
+        .achievement-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .content-block p {
+            font-size: 1.35rem;
+            line-height: 1.7;
+            color: var(--secondary-text-color);
+            text-align: justify;
+        }
+
+        .content-block p strong {
+            color: var(--primary-text-color);
+            font-weight: 700;
+        }
+
+        .stat-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-card h4 {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--secondary-text-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-text-color);
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--primary-text-color);
+        }
+
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            height: 280px;
+        }
+
+        .text-stat-block {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 16px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .text-stat-block .icon-large {
+            font-size: 6rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .text-stat-block .achievement-title {
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .text-stat-block p {
+            text-align: center;
+            font-size: 1.3rem;
+        }
+
+        .orientation-intro,
+        .slider-content-container {
+            width: 100%;
+            /* thay 115% thành 100% */
+            max-width: 100%;
+            /* đảm bảo không vượt quá */
+        }
+
+
+        body,
+        html {
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+
+        .slide-container,
+        .main-content,
+        .content-section,
+        .orientation-container,
+        .slider-content-container,
+        .achievements-content-container {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        .slider-nav {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: nowrap;
+        }
+
+        body,
+        html {
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="particle-container"></div>
+    <div class="slide-container">
+        <div class="logo">
+            <img src="Image/logo.png" alt="Logo">
+        </div>
+
+        <header class="slide-header">
+            <h1>Thực trạng chuyển đổi số ở Việt Nam</h1>
+        </header>
+
+        <main class="main-content">
+            <section id="content-thach-thuc" class="content-section active">
+                <!-- Bố cục 4-3 mới -->
+                <div class="challenge-layout">
+                    <div class="challenge-row">
+                        <div class="challenge-bubble"
+                            data-text="Chênh lệch lớn về hạ tầng, thiết bị và kỹ năng số giữa thành thị và nông thôn, giữa các nhóm dân cư."
+                            data-images="Image/khoangcachso01.png,Image/khoangcachso02.png">
+                            <i class='bx bx-wifi-off icon'></i>
+                            <span>Khoảng cách số</span>
+                        </div>
+                        <div class="challenge-bubble"
+                            data-text="Nhiều tổ chức chưa có chiến lược, thiếu nguồn lực tài chính và nhân lực cho chuyển đổi số."
+                            data-images="Image/taichinh.png,Image/nhanluc.png">
+                            <i class='bx bx-bulb icon'></i>
+                            <span>Nhận thức & Năng lực</span>
+                        </div>
+                        <div class="challenge-bubble"
+                            data-text="Tỷ lệ lao động có kỹ năng đáp ứng yêu cầu của nền kinh tế số còn thấp, thiếu chuyên gia công nghệ cao."
+                            data-images="Image/trinhdo.png,Image/chuyengia.png">
+                            <i class='bx bxs-user-badge icon'></i>
+                            <span>Kỹ năng & Nhân lực</span>
+                        </div>
+                        <div class="challenge-bubble"
+                            data-text="Dữ liệu phân tán, thiếu chuẩn hóa và chia sẻ, trong khi chiến lược dữ liệu quốc gia chưa hoàn thiện."
+                            data-images="Image/datacenter.png,Image/fragmentdata.png">
+                            <i class='bx bxs-data icon'></i>
+                            <span>Quản trị Dữ liệu</span>
+                        </div>
+                    </div>
+                    <div class="challenge-row">
+                        <div class="challenge-bubble"
+                            data-text="Pháp luật và cơ chế quản lý chưa theo kịp tốc độ phát triển công nghệ; chính sách hỗ trợ chuyển đổi số còn thiếu đồng bộ."
+                            data-images="Image/kyvong.png,Image/thuctrang.png">
+                            <i class='bx bxs-bank icon'></i>
+                            <span>Khung pháp lý</span>
+                        </div>
+                        <div class="challenge-bubble"
+                            data-text="Nguy cơ rò rỉ dữ liệu, tấn công mạng gia tăng trong khi năng lực bảo mật của nhiều tổ chức còn hạn chế."
+                            data-images="Image/rori.png,Image/baove.png">
+                            <i class='bx bx-shield-x icon'></i>
+                            <span>An ninh mạng</span>
+                        </div>
+                        <div class="challenge-bubble"
+                            data-text="Một số dự án chuyển đổi số còn manh mún, thiếu liên kết giữa các bộ ngành, địa phương và doanh nghiệp."
+                            data-images="Image/manhmun.png,Image/lapghep.png">
+                            <i class='bx bx-git-compare icon'></i>
+                            <span>Tính đồng bộ</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Các section cho menu khác -->
+            <section id="content-dinh-huong" class="content-section">
+                <div class="orientation-container">
+                    <!-- Khung giới thiệu chung -->
+                    <div class="orientation-intro">
+                        Đảng và Nhà nước giữ vai trò <strong>định hướng</strong>, <strong>chỉ đạo</strong> toàn diện quá
+                        trình chuyển đổi số quốc gia.
+                    </div>
+
+                    <!-- Menu trượt ngang -->
+                    <div class="slider-nav-container">
+                        <div class="slider-nav">
+                            <button class="slider-btn active" data-target="content-nq52">NQ 52-NQ/TW</button>
+                            <button class="slider-btn" data-target="content-qd749">QĐ 749/QĐ-TTg</button>
+                            <button class="slider-btn" data-target="content-qd942">QĐ 942/QĐ-TTg</button>
+                            <button class="slider-btn" data-target="content-qd411">QĐ 411/QĐ-TTg</button>
+                            <button class="slider-btn" data-target="content-nq57">NQ 57-NQ/TW</button>
+                            <button class="slider-btn" data-target="content-qd146">QĐ 146/QĐ-TTg</button>
+                            <button class="slider-btn" data-target="content-qd230">QĐ 230-QĐ/TW</button>
+                            <button class="slider-btn" data-target="content-qd333">QĐ 333-QĐ/TW</button>
+                        </div>
+                    </div>
+
+                    <!-- Khung hiển thị nội dung -->
+                    <div class="slider-content-container">
+                        <div id="content-nq52" class="slider-content active">
+                            <h3>Nghị quyết số 52-NQ/TW (2019)</h3>
+                            <p>Chủ động tham gia CMCN 4.0. Mục tiêu đến 2030, kinh tế số chiếm <strong>30% GDP</strong>,
+                                Chính phủ điện tử vào <strong>top 50</strong> thế giới.</p>
+                        </div>
+                        <div id="content-qd749" class="slider-content">
+                            <h3>Quyết định số 749/QĐ-TTg (2020)</h3>
+                            <p>Phê duyệt Chương trình CĐS quốc gia với "mục tiêu kép": phát triển Chính phủ số, kinh tế
+                                số, xã hội số và doanh nghiệp công nghệ số.</p>
+                        </div>
+                        <div id="content-qd942" class="slider-content">
+                            <h3>Quyết định số 942/QĐ-TTg (2021)</h3>
+                            <p>Phát triển Chính phủ điện tử hướng tới Chính phủ số. Mục tiêu <strong>100% dịch vụ
+                                    công</strong> đủ điều kiện được trực tuyến toàn trình.</p>
+                        </div>
+                        <div id="content-qd411" class="slider-content">
+                            <h3>Quyết định số 411/QĐ-TTg (2022)</h3>
+                            <p>Chiến lược quốc gia phát triển kinh tế số và xã hội số. Phát triển hạ tầng số, kỹ năng
+                                số, dữ liệu số <strong>đồng bộ, toàn diện</strong>.</p>
+                        </div>
+                        <div id="content-nq57" class="slider-content">
+                            <h3>Nghị quyết số 57-NQ/TW (2024)</h3>
+                            <p>Xác định KHCN, đổi mới sáng tạo và CĐS là <strong>đột phá chiến lược</strong>, điều kiện
+                                tiên quyết để phát triển bứt phá.</p>
+                        </div>
+                        <div id="content-qd146" class="slider-content">
+                            <h3>Quyết định số 146/QĐ-TTg (2024)</h3>
+                            <p>Chiến lược quốc gia phát triển kinh tế số, xã hội số. Mục tiêu kinh tế số chiếm
+                                <strong>30% GDP (2030)</strong> và <strong>50% (2045)</strong>.
+                            </p>
+                        </div>
+                        <div id="content-qd230" class="slider-content">
+                            <h3>Quyết định số 230-QĐ/TW (10/01/2025)</h3>
+                            <p>Quy định chức năng, nhiệm vụ, quyền hạn của Ban Chỉ đạo Trung ương về phát triển KHCN,
+                                đổi mới sáng tạo và chuyển đổi số.</p>
+                        </div>
+                        <div id="content-qd333" class="slider-content">
+                            <h3>Quyết định số 333-QĐ/TW (24/6/2025)</h3>
+                            <p>Ban hành Kiến trúc chuyển đổi số trong các cơ quan đảng, tạo nền tảng đồng bộ, thống
+                                nhất.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="content-thanh-tuu" class="content-section">
+                <div class="achievements-container">
+                    <!-- Menu trượt ngang cho Thành tựu -->
+                    <div class="slider-nav-container achievements-nav">
+                        <div class="slider-nav">
+                            <button class="slider-btn active" data-target="content-kinh-te-so">Kinh tế số</button>
+                            <button class="slider-btn" data-target="content-chinh-phu-so">Chính phủ số</button>
+                            <button class="slider-btn" data-target="content-xa-hoi-so">Xã hội số</button>
+                            <button class="slider-btn" data-target="content-xep-hang">Xếp hạng quốc tế</button>
+                        </div>
+                    </div>
+
+                    <!-- Khung hiển thị nội dung cho Thành tựu -->
+                    <div class="slider-content-container achievements-content-container">
+                        <!-- Trang 1: Kinh tế số -->
+                        <div id="content-kinh-te-so" class="slider-content active">
+                            <div class="achievement-page layout-2-col">
+                                <div class="content-block">
+                                    <h3 class="achievement-title"><i class='bx bx-line-chart'></i>Tăng trưởng ấn tượng
+                                    </h3>
+                                    <p>Kinh tế số Việt Nam có tốc độ tăng trưởng nhanh nhất Đông Nam Á 2 năm liền
+                                        (2022-2023), cao gấp <strong>3 lần</strong> tăng trưởng GDP.</p>
+                                    <div class="stat-cards-grid">
+                                        <div class="stat-card">
+                                            <h4>Tỷ trọng/GDP (2023)</h4>
+                                            <span class="stat-number">16,5%</span>
+                                        </div>
+                                        <div class="stat-card">
+                                            <h4>GMV dự báo (2025)</h4>
+                                            <span class="stat-number">45 tỷ USD</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="content-block">
+                                    <h4 class="chart-title">Thương mại điện tử bùng nổ (tỷ USD)</h4>
+                                    <div class="chart-wrapper">
+                                        <canvas id="ecommerceChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Trang 2: Chính phủ số -->
+                        <div id="content-chinh-phu-so" class="slider-content">
+                            <div class="achievement-page layout-3-col">
+                                <div class="content-block text-stat-block">
+                                    <i class='bx bxs-institution icon-large'></i>
+                                    <h3 class="achievement-title">Hiệu quả & Minh bạch</h3>
+                                    <p>Cổng Dịch vụ công Quốc gia cung cấp <strong>4.456</strong> dịch vụ, xử lý hơn
+                                        <strong>23,1 triệu</strong> hồ sơ trực tuyến trong 9 tháng đầu năm 2024.
+                                    </p>
+                                </div>
+                                <div class="content-block text-stat-block">
+                                    <i class='bx bx-transfer-alt icon-large'></i>
+                                    <h3 class="achievement-title">Liên thông Văn bản</h3>
+                                    <p>Hơn <strong>8 triệu</strong> văn bản điện tử được gửi/nhận qua Trục liên thông
+                                        quốc gia (9 tháng đầu năm 2024), tổng tích lũy đạt <strong>43,1 triệu</strong>.
+                                    </p>
+                                </div>
+                                <div class="content-block text-stat-block">
+                                    <i class='bx bx-data icon-large'></i>
+                                    <h3 class="achievement-title">Chia sẻ Dữ liệu</h3>
+                                    <p>Nền tảng NDXP ghi nhận <strong>1,013 tỷ</strong> giao dịch trong năm 2024, tăng
+                                        <strong>57%</strong> so với 2023, kết nối các CSDL quốc gia quan trọng.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Trang 3: Xã hội số -->
+                        <div id="content-xa-hoi-so" class="slider-content">
+                            <div class="achievement-page layout-2-col">
+                                <div class="content-block">
+                                    <h3 class="achievement-title"><i class='bx bx-wifi'></i>Hạ tầng & Thanh toán</h3>
+                                    <p><strong>82,4%</strong> hộ gia đình có internet cáp quang. Thanh toán không tiền
+                                        mặt tăng trưởng mạnh, giao dịch tăng tới <strong>99,1%</strong>.</p>
+                                    <h3 class="achievement-title" style="margin-top: 2rem;"><i
+                                            class='bx bxs-graduation'></i>Giáo dục & Nhân lực</h3>
+                                    <p>Thí điểm học bạ số với hơn <strong>4,2 triệu</strong> học bạ được số hóa
+                                        (62,29%). Nhân lực ngành CNTT đạt <strong>561.000</strong> người.</p>
+                                </div>
+                                <div class="content-block">
+                                    <h4 class="chart-title">Tỷ lệ hộ gia đình có Internet cáp quang</h4>
+                                    <div class="chart-wrapper">
+                                        <canvas id="internetChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Trang 4: Xếp hạng quốc tế -->
+                        <div id="content-xep-hang" class="slider-content">
+                            <div class="achievement-page layout-3-col">
+                                <div class="content-block text-stat-block">
+                                    <i class='bx bx-bulb icon-large'></i>
+                                    <h3 class="achievement-title">Đổi mới sáng tạo (GII)</h3>
+                                    <p>Năm 2023, Việt Nam xếp thứ <strong>46/132</strong> quốc gia, tăng <strong>2
+                                            bậc</strong> so với năm 2022, duy trì vị thế dẫn đầu trong nhóm các nước thu
+                                        nhập trung bình thấp.</p>
+                                </div>
+                                <div class="content-block text-stat-block">
+                                    <i class='bx bxs-server icon-large'></i>
+                                    <h3 class="achievement-title">Chính phủ điện tử (EGDI)</h3>
+                                    <p>Liên tục thăng hạng trong các báo cáo gần đây của Liên Hợp Quốc, thể hiện nỗ lực
+                                        vượt bậc trong việc cung cấp dịch vụ công trực tuyến.</p>
+                                </div>
+                                <div class="content-block text-stat-block">
+                                    <i class='bx bx-shield-quarter icon-large'></i>
+                                    <h3 class="achievement-title">An ninh mạng (GCI)</h3>
+                                    <p>Luôn duy trì ở thứ hạng cao trong khu vực và trên thế giới, khẳng định năng lực
+                                        đảm bảo an toàn, an ninh không gian mạng quốc gia.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Menu điều hướng (chuyển xuống dưới) -->
+        <nav class="main-nav">
+            <a href="#thach-thuc" class="nav-link active">Thách thức</a>
+            <a href="#dinh-huong" class="nav-link">Định hướng</a>
+            <a href="#thanh-tuu" class="nav-link">Thành tựu</a>
+        </nav>
+        <a href="slide2.html" class="back-button">◁</a>
+        <!-- Nút Tiếp tục (tạm thời chưa liên kết) -->
+        <a href="slide4.html" class="next-button">▷</a>
+    </div>
+
+    <!-- Cửa sổ Modal -->
+    <div id="challenge-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div id="modal-image-container"></div>
+            <div id="modal-text-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // --- Logic chung ---
+        const mainNavLinks = document.querySelectorAll('.main-nav .nav-link');
+        const mainContentSections = document.querySelectorAll('.main-content .content-section');
+
+        // Biến toàn cục để lưu các instance của biểu đồ
+        let ecommerceChartInstance, internetChartInstance;
+
+        mainNavLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.querySelector('.main-nav .nav-link.active')?.classList.remove('active');
+                document.querySelector('.main-content .content-section.active')?.classList.remove('active');
+                link.classList.add('active');
+                const targetId = `content-${link.getAttribute('href').substring(1)}`;
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
+
+                // [THAY ĐỔI] Kích hoạt lại animation cho biểu đồ khi nhấn vào menu "Thành tựu"
+                if (targetId === 'content-thanh-tuu') {
+                    const activeAchievementTab = document.querySelector('#content-thanh-tuu .slider-content.active');
+                    if (activeAchievementTab) {
+                        // Dựa vào ID của sub-tab đang active để vẽ lại biểu đồ tương ứng
+                        if (activeAchievementTab.id === 'content-kinh-te-so') {
+                            initEcommerceChart(); // Gọi hàm vẽ lại
+                        } else if (activeAchievementTab.id === 'content-xa-hoi-so') {
+                            initInternetChart(); // Gọi hàm vẽ lại
+                        }
+                    }
+                }
+            });
+        });
+
+        // --- Logic cho Modal "Thách thức" ---
+        const challengeBubbles = document.querySelectorAll('.challenge-bubble');
+        const modal = document.getElementById('challenge-modal');
+        if (modal) {
+            const modalImageContainer = document.getElementById('modal-image-container');
+            const modalTextContainer = document.getElementById('modal-text-container');
+
+            challengeBubbles.forEach(bubble => {
+                bubble.addEventListener('click', () => {
+                    const text = bubble.dataset.text;
+                    const images = bubble.dataset.images ? bubble.dataset.images.split(',') : [];
+                    modalTextContainer.textContent = text;
+                    modalImageContainer.innerHTML = '';
+                    if (images.length > 0) {
+                        images.forEach(src => {
+                            const img = document.createElement('img');
+                            img.src = src;
+                            img.alt = "Hình ảnh minh họa";
+                            img.onerror = () => { img.src = `https://placehold.co/600x400/3b82f6/ffffff?text=Image+Not+Found`; };
+                            modalImageContainer.appendChild(img);
+                        });
+                        modalImageContainer.style.display = 'flex';
+                    } else {
+                        modalImageContainer.style.display = 'none';
+                    }
+                    modal.classList.add('active');
+                });
+            });
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.classList.remove('active');
+            });
+        }
+
+        // --- Logic cho Slider "Định hướng" ---
+        const orientationSliderBtns = document.querySelectorAll('#content-dinh-huong .slider-btn');
+        if (orientationSliderBtns.length > 0) {
+            orientationSliderBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelector('#content-dinh-huong .slider-btn.active')?.classList.remove('active');
+                    document.querySelector('#content-dinh-huong .slider-content.active')?.classList.remove('active');
+                    btn.classList.add('active');
+                    const targetId = btn.dataset.target;
+                    document.getElementById(targetId)?.classList.add('active');
+                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                });
+            });
+        }
+
+        // --- Logic cho Slider "Thành tựu" VÀ BIỂU ĐỒ ---
+        const initEcommerceChart = () => {
+            const ctx = document.getElementById('ecommerceChart')?.getContext('2d');
+            if (!ctx) return;
+            if (ecommerceChartInstance) ecommerceChartInstance.destroy(); // Hủy biểu đồ cũ
+            ecommerceChartInstance = new Chart(ctx, { // Tạo biểu đồ mới
+                type: 'bar',
+                data: {
+                    labels: ['2022', '2023'],
+                    datasets: [{ label: 'Tỷ USD', data: [16.5, 20.5], backgroundColor: ['rgba(34, 211, 238, 0.6)', 'rgba(139, 92, 246, 0.6)'], borderColor: ['#22d3ee', '#8b5cf6'], borderWidth: 2 }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: 'white', font: { weight: 'bold' } } },
+                        x: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: 'white', font: { weight: 'bold' } } }
+                    }
+                }
+            });
+        };
+
+        const initInternetChart = () => {
+            const ctx = document.getElementById('internetChart')?.getContext('2d');
+            if (!ctx) return;
+            if (internetChartInstance) internetChartInstance.destroy(); // Hủy biểu đồ cũ
+            internetChartInstance = new Chart(ctx, { // Tạo biểu đồ mới
+                type: 'doughnut',
+                data: {
+                    labels: ['Có Internet cáp quang', 'Chưa có'],
+                    datasets: [{ data: [82.4, 17.6], backgroundColor: ['#22d3ee', 'rgba(255,255,255,0.2)'], borderColor: ['#8b5cf6', 'transparent'], borderWidth: 2 }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: 'white', font: { weight: 'bold' } } },
+                        tooltip: { callbacks: { label: (context) => `${context.label}: ${context.raw}%` } }
+                    }
+                }
+            });
+        };
+
+        const achievementNavContainer = document.querySelector('.achievements-nav');
+        if (achievementNavContainer) {
+            const sliderBtns = achievementNavContainer.querySelectorAll('.slider-btn');
+            const contentContainer = document.querySelector('.achievements-content-container');
+
+            sliderBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Logic chuyển tab con trong "Thành tựu"
+                    achievementNavContainer.querySelector('.slider-btn.active')?.classList.remove('active');
+                    contentContainer.querySelector('.slider-content.active')?.classList.remove('active');
+                    btn.classList.add('active');
+                    const targetId = btn.dataset.target;
+                    const targetContent = document.getElementById(targetId);
+                    if (targetContent) targetContent.classList.add('active');
+                    btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
+                    // Vẽ biểu đồ tương ứng khi chuyển tab con
+                    if (targetId === 'content-kinh-te-so') initEcommerceChart();
+                    if (targetId === 'content-xa-hoi-so') initInternetChart();
+                });
+            });
+            // Khởi tạo biểu đồ cho tab đầu tiên khi slide được load
+            if (document.querySelector('#content-thanh-tuu').classList.contains('active')) {
+                initEcommerceChart();
+            }
+        }
+
+
+        // --- Nền hạt (không đổi) ---
+        const particleContainer = document.getElementById('particle-container');
+        if (particleContainer) {
+            for (let i = 0; i < 30; i++) {
+                const p = document.createElement('div');
+                p.style.cssText = `position:absolute;width:${Math.random() * 3 + 1}px;height:${Math.random() * 3 + 1}px;background:var(--particle-color);border-radius:50%;top:${Math.random() * 100}%;left:${Math.random() * 100}%;animation:float ${Math.random() * 15 + 10}s infinite ease-in-out;animation-delay:${Math.random() * 20}s;opacity:0;`;
+                particleContainer.appendChild(p);
+            }
+            if (!document.querySelector('style[data-anim="float"]')) {
+                const s = document.createElement("style");
+                s.setAttribute('data-anim', 'float');
+                s.innerText = `@keyframes float{0%{transform:translateY(0);opacity:0}25%{opacity:1}50%{transform:translateY(-15vh)}75%{opacity:1}100%{transform:translateY(0);opacity:0}}`;
+                document.head.appendChild(s);
+            }
+        }
+    </script>
+
+</body>
+
+</html>

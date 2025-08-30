@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chuyên đề: Ứng dụng chuyển đổi số</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* --- Bảng màu mới, tươi sáng hơn --- */
+            --gradient-start: #3b82f6;
+            --gradient-end: #8b5cf6;
+            --primary-text-color: #ffffff;
+            --secondary-text-color: rgba(255, 255, 255, 0.85);
+            --accent-color: #22d3ee;
+            /* Xanh Cyan nổi bật */
+            --particle-color: rgba(255, 255, 255, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+            /* --- Nền Gradient mới --- */
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--primary-text-color);
+            overflow: hidden;
+        }
+
+        /* --- Nền hạt chuyển động --- */
+        #particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background-color: var(--particle-color);
+            border-radius: 50%;
+            animation: float 25s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+
+            25% {
+                opacity: 1;
+            }
+
+            50% {
+                transform: translateY(-20vh) translateX(10vw);
+            }
+
+            75% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+        }
+
+
+        /* --- Bố cục chính --- */
+        .slide-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            width: 100%;
+            height: 100%;
+            padding: 5vw;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* --- Logo --- */
+        .logo {
+            position: absolute;
+            width: 80px;
+            top: 40px;
+            right: 40px;
+            width: 150px;
+        }
+
+        .logo img {
+            width: 80px;
+            height: auto;
+        }
+
+        /* --- Nội dung chính (nới rộng) --- */
+        .content {
+            /* --- Tăng chiều rộng để tránh ngắt dòng không mong muốn --- */
+            /* Bạn có thể điều chỉnh giá trị này nếu cần */
+            max-width: 60%;
+            position: relative;
+            z-index: 3;
+            /* Đảm bảo nội dung luôn ở trên cùng */
+        }
+
+        .content .accent-line {
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent-color);
+            margin-bottom: 2rem;
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: scaleIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.5s forwards;
+        }
+
+        .content h1 {
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            opacity: 0;
+            animation: fadeInUp 1s ease 0.8s forwards;
+        }
+
+        .content .subtitle {
+            font-size: clamp(1rem, 2vw, 1.45rem);
+            color: var(--secondary-text-color);
+            margin-bottom: 3rem;
+            max-width: 90%;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1s forwards;
+            font-style: italic;
+        }
+
+        .content .date-location {
+            font-size: 18px;
+            color: var(--secondary-text-color);
+            opacity: 0;
+            animation: fadeInUp 1s ease 1.2s forwards;
+            background-color: white;
+            color: #3b82f6;
+            border-radius: 16px;
+            width: fit-content;
+            padding: 16px;
+        }
+
+        /* --- Nút Next --- */
+        /* --- Nút Tiếp tục --- */
+        .next-button {
+            background: var(--card-bg-color);
+            padding-right: 0;
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            height: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            border: 2px solid var(--secondary-text-color);
+            border-radius: 50%;
+            /* Thuộc tính quan trọng nhất để tạo hình tròn */
+            color: var(--primary-text-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1.8s forwards;
+            z-index: 3;
+        }
+
+        .next-button:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(34, 211, 238, 0.3);
+        }
+
+        /* --- [THÊM MỚI] CSS cho nút Lùi lại --- */
+        .back-button {
+            background: var(--card-bg-color);
+            padding-left: 0;
+            position: absolute;
+            bottom: 40px;
+            right: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            height: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            border: 2px solid var(--secondary-text-color);
+            border-radius: 50%;
+            /* Thuộc tính quan trọng nhất để tạo hình tròn */
+            color: var(--primary-text-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1.8s forwards;
+            z-index: 3;
+        }
+
+        .back-button:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(34, 211, 238, 0.3);
+        }
+
+        /* --- KHU VỰC DÀNH CHO HÌNH ẢNH BIỂU TƯỢNG --- */
+        .symbol-image-container {
+            position: absolute;
+            right: 4vw;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 35vw;
+            max-width: 400px;
+            height: auto;
+            opacity: 0;
+            animation: fadeInRight 1.2s ease 1.6s forwards;
+            z-index: 2;
+            /* Nằm dưới text, trên nền */
+        }
+
+        .symbol-image-container img {
+            border: 5px solid white;
+            border-radius: 15px;
+            width: 100%;
+            height: auto;
+            margin-left: -30px;
+            /* --- Độ mờ để hình ảnh hòa vào nền --- */
+            opacity: 1.0;
+        }
+
+        /* --- Hiệu ứng Animation --- */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scaleX(0);
+            }
+
+            to {
+                transform: scaleX(1);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateY(-50%) translateX(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(-50%) translateX(0);
+            }
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .slide-container {
+                align-items: center;
+                text-align: center;
+            }
+
+            .content {
+                max-width: 100%;
+                z-index: 3;
+            }
+
+            .content .accent-line {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .content .subtitle {
+                max-width: 100%;
+            }
+
+            .logo {
+                top: 20px;
+                width: 80px;
+                right: 50%;
+                transform: translateX(50%);
+                width: 120px;
+            }
+
+            .next-button {
+                right: 50%;
+                transform: translateX(50%);
+                bottom: 20px;
+            }
+
+            /* --- Ẩn hình ảnh biểu tượng trên màn hình nhỏ để tránh rối mắt --- */
+            .symbol-image-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="particle-container"></div>
+
+    <!-- TIỀN ĐỀ CHO HÌNH ẢNH BIỂU TƯỢNG -->
+    <div class="symbol-image-container">
+        <!-- 
+            QUAN TRỌNG: 
+            Thay thế đường dẫn trong "src" bên dưới bằng hình ảnh của bạn.
+            Nên dùng ảnh định dạng PNG không nền để có hiệu ứng đẹp nhất.
+        -->
+        <img src="Image/chuyendoiso.png" alt="Biểu tượng Chuyển đổi số">
+    </div>
+
+    <div class="slide-container">
+        <div class="logo">
+            <img src="Image/logo.png" alt="Logo">
+        </div>
+
+        <div class="content">
+            <div class="accent-line"></div>
+            <h2>Chuyên đề:</h2><br>
+            <h1>ỨNG DỤNG CHUYỂN ĐỔI SỐ <br>TRONG HỌC TẬP, RÈN LUYỆN <br>VÀ SINH HOẠT CHI BỘ</h1>
+            <p class="subtitle">Thực hiện: Tổ Đảng Công nghệ thông tin</p>
+            <br> <br>
+            <p class="date-location">Quý 3, năm 2025</p>
+        </div>
+
+        <a href="slide2.html" class="next-button">▷</a>
+    </div>
+
+    <script>
+        // Tạo các hạt nền một cách ngẫu nhiên
+        const particleContainer = document.getElementById('particle-container');
+        const particleCount = 50;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+
+            const size = Math.random() * 4 + 1; // Kích thước hạt nhỏ hơn một chút
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+
+            particle.style.top = `${Math.random() * 100}%`;
+            particle.style.left = `${Math.random() * 100}%`;
+
+            const delay = Math.random() * 25;
+            const duration = Math.random() * 15 + 10;
+            particle.style.animationDelay = `${delay}s`;
+            particle.style.animationDuration = `${duration}s`;
+
+            particleContainer.appendChild(particle);
+        }
+    </script>
+
+</body>
+
+</html>
