@@ -587,6 +587,39 @@
             box-shadow: 0 10px 20px rgba(34, 211, 238, 0.3);
         }
 
+        .page-button {
+            background: var(--card-bg-color);
+            padding-right: 0;
+            position: absolute;
+            bottom: 40px;
+            right: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            height: 60px;
+            /* Điều chỉnh kích thước để tạo hình tròn */
+            border: 2px solid var(--secondary-text-color);
+            border-radius: 50%;
+            /* Thuộc tính quan trọng nhất để tạo hình tròn */
+            color: var(--primary-text-color);
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 1s ease 1.8s forwards;
+            z-index: 3;
+        }
+
+        .page-button:hover {
+            background-color: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(34, 211, 238, 0.3);
+        }
+
+
         /* --- [THÊM MỚI] CSS cho nút Lùi lại --- */
         .back-button {
             background: var(--card-bg-color);
@@ -619,6 +652,26 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(34, 211, 238, 0.3);
         }
+
+        .qr-content {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            max-width: 400px;
+            max-height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .qr-image {
+            width: 100%;
+            height: auto;
+            max-width: 350px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
 
 
         @media (max-width: 900px) {
@@ -731,8 +784,8 @@
             <a href="#hoc-tap" class="nav-link active">Học tập & Rèn luyện</a>
             <a href="#sinh-hoat" class="nav-link">Sinh hoạt Chi bộ</a>
         </nav>
-        <a href="slide3.html" class="back-button">◁</a>
-        <!-- [THÊM MỚI] HTML cho nút Tiếp tục -->
+        <a href="https://thanhduy623.github.io/cbsvkt2-portal/" class="page-button" target="_blank">🌐</a>
+        <a href="slide3.html" class="back-button">◁</a> <!-- [THÊM MỚI] HTML cho nút Tiếp tục -->
         <a href="slide5.html" class="next-button">▷</a>
     </div>
 
@@ -742,6 +795,14 @@
             <div id="modal-text-container"></div>
         </div>
     </div>
+
+    <!-- Modal QR -->
+    <div id="qr-modal" class="modal-overlay">
+        <div class="modal-content qr-content">
+            <img src="Image/qr-link-page.png" alt="QR Code" class="qr-image">
+        </div>
+    </div>
+
 
     <script>
         const mainNavLinks = document.querySelectorAll('.main-nav .nav-link');
@@ -846,8 +907,24 @@
                 const s = document.createElement("style"); s.setAttribute('data-anim', 'float'); s.innerText = `@keyframes float{0%{transform:translateY(0);opacity:0}25%{opacity:1}50%{transform:translateY(-15vh)}75%{opacity:1}100%{transform:translateY(0);opacity:0}}`; document.head.appendChild(s);
             }
         }
-    </script>
 
+        // Modal QR
+        const hubImage = document.querySelector('.hub-image-container img');
+        const qrModal = document.getElementById('qr-modal');
+
+        if (hubImage && qrModal) {
+            hubImage.style.cursor = "pointer";
+            hubImage.addEventListener('click', () => {
+                qrModal.classList.add('active');
+            });
+
+            qrModal.addEventListener('click', (e) => {
+                if (e.target === qrModal) {
+                    qrModal.classList.remove('active');
+                }
+            });
+        }
+    </script>
 </body>
 
 </html>
