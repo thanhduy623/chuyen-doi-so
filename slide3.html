@@ -36,10 +36,13 @@
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             color: var(--primary-text-color);
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            /* chặn tràn ngang */
+            overflow-y: auto;
         }
 
         /* --- Nền hạt chuyển động (Giữ nguyên) --- */
@@ -100,6 +103,8 @@
 
         /* --- Vùng nội dung chính --- */
         .main-content {
+            overflow-y: auto;
+            transform: scale(0.8);
             flex-grow: 1;
             display: flex;
             align-items: center;
@@ -493,12 +498,11 @@
             min-height: 180px;
             /* Chiều cao tối thiểu để không bị giật layout */
             height: auto;
-            max-height: 300px;
             /* Chiều cao tối đa */
             background: var(--card-bg-color);
             border: 1px solid var(--card-border-color);
             border-radius: 16px;
-            padding: 1.0rem;
+            padding: 16px;
             backdrop-filter: blur(10px);
             position: relative;
         }
@@ -545,7 +549,6 @@
             flex-direction: column;
             align-items: center;
             width: 100%;
-            max-width: 1200px;
             /* Rộng hơn để chứa biểu đồ */
             gap: 1.5rem;
             opacity: 0;
@@ -560,7 +563,7 @@
         }
 
         .achievements-content-container {
-            min-height: 450px;
+            min-height: 400px;
             /* Cao hơn để chứa biểu đồ và nội dung */
             width: 100%;
             background: var(--card-bg-color);
@@ -712,11 +715,6 @@
             display: flex;
             gap: 1rem;
             flex-wrap: nowrap;
-        }
-
-        body,
-        html {
-            overflow: hidden;
         }
     </style>
 </head>
